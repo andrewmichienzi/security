@@ -30,8 +30,6 @@ public class Decryption
 			byte[] iv = getFileByteArray(IV_FILEPATH);
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");			
 			cipher.init(DECRYPT_MODE, sk, new IvParameterSpec(iv));
-			System.out.println("oh hey");
-			System.out.println("hey");
 			byte[] file = getFileByteArray(FILENAME);
 			byte[] decryptedFile = cipher.doFinal(file);
 			streamToFile(decryptedFile, DECRYPTED_FILEPATH);
@@ -49,8 +47,6 @@ public class Decryption
 			byte[] bytes = new byte[(int) file.length()];
 			return Files.readAllBytes(new File(filepath).toPath());
 		}catch(Exception e){
-			
-			System.out.println("2");
 		}
 	return null;
 	}
@@ -61,8 +57,7 @@ public class Decryption
 			fos.write(file);
 			fos.close();	
 		}catch (Exception e){
-
-			System.out.println("3");
+			System.out.println(e.getMessage());
 		}
 		return;
 	}
@@ -70,4 +65,13 @@ public class Decryption
 		byte[] key = getFileByteArray(KEY_FILEPATH);
 		return new SecretKeySpec(key, 0, key.length, ALGORITHM);
 	}
+		
+	public static byte[] padBytes(byte[] bytes){
+		int pad = 16 - (bytes.length % 16);
+		int len = (bytes.length + pad);
+		System.out.println("bytes.Length = " + bytes.length + "\npad = "+ pad + "\nlen = " + len);
+		byte[] newBytes = new byte[len];
+		java.lang.System.arraycopy((Object)bytes, 0, (Object)newBytes, bytes.length, 0);
+		return newBytes;
+	} 
 }
